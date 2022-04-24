@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="./js/jquery.json-viewer.js"></script>
+    <link
+      href="./css/jquery.json-viewer.css"
+      type="text/css"
+      rel="stylesheet"
+    />
+    <style type="text/css">
+      .json_search_butn {
+        text-decoration: none;
+        color: rgb(29, 101, 255);
+      }
+      .json_search_butn:hover {
+        text-decoration: none;
+        color: rgb(0, 63, 198);
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: fixed; right: 10px">
+      <input style="background-color: #0000;color:white;border: 1px white solid;" id="search" />
+      <a href="#" id="previous" class="json_search_butn">previous</a>
+      <a href="#" id="next" class="json_search_butn">next</a>
+    </div>
+
+    <div style="height: 200px" id="test"></div>
+  </body>
+</html>
+<script>
+  while ($("#test") == undefined) {}
+  $("#test").jsonViewer(
+    {
+      code: "200",
+      message: null,
+      success: true,
+      pageNum: 1,
+      pageSize: 2,
+      totalItem: 65,
+      totalPage: 33,
+      list: [
+        {
+          trackCode: "mock_3e665b26ba0f11ec9825dc215c8e1565",
+          documentType: 1,
+          status: "WAITING_PROCESS",
+          title: "前置品类完成",
+          employeePin: "jd_7ac82b905b876",
+          employeeName: "李杨",
+          marketCode: "10007010",
+          marketName: "门店1",
+          companyCode: "10006997",
+          companyName: "分部",
+          createTime: "2022-04-10T04:00:00.000+00:00",
+          content: "正文",
+          createPersonPin: "jd_7ac82b905b876",
+          createPersonName: "张宇哲",
+        },
+        {
+          trackCode: "mock_3e66341fba0f11ec93fedc215c8e1565",
+          documentType: 1,
+          status: "WAITING_PROCESS",
+          title: "前置品类完成",
+          employeePin: "jd_4bcbbcde6a3e8",
+          employeeName: "徐昕健",
+          marketCode: "10007817",
+          marketName: "门店2",
+          companyCode: "10006997",
+          companyName: "分部",
+          createTime: "2022-04-10T04:00:00.000+00:00",
+          content: "正文",
+          createPersonPin: "jd_4bcbbcde6a3e8",
+          createPersonName: "张宇哲",
+        },
+      ],
+    },
+    { withQuotes: true }
+  );
+  // 搜索框
+  var curIndex = 0;
+  var curList = [];
+  $("#search").bind("input propertychange", function (e) {
+    console.log(e);
+    var str = $("#search").val();
+    var lis = $("#test").find("li");
+    if (str == "") {
+      lis.toArray().forEach(function (e) {
+        $(e).attr("style", "");
+      });
+      return;
+    }
+    curList = [];
+    curIndex = 0;
+    lis.toArray().forEach(function (e) {
+      if (e.innerText.match(str)) {
+        if ($(e).find("li").toArray().length == 0) {
+          $(e).attr(
+            "style",
+            "background-color:rgb(255, 245, 205);display:table"
+          );
+          $(e).attr("id", Math.random() * Math.random());
+          curList.push(e);
+        }
+      } else {
+        $(e).attr("style", "");
+      }
+      $(curList[curIndex]).attr(
+        "style",
+        "background-color:rgb(255, 204, 0);display:table"
+      );
+    });
+  });
+
+  // 前一个
+  $("#previous").click(function () {
+    $(curList[curIndex]).attr(
+      "style",
+      "background-color:rgb(255, 245, 205);display:table"
+    );
+    curIndex = curIndex == 0 ? 0 : curIndex - 1;
+    $(curList[curIndex]).attr(
+      "style",
+      "background-color:rgb(255, 204, 0);display:table"
+    );
+    $(this).attr("href", "#" + $(curList[curIndex]).attr("id"));
+  });
+
+  // 后一个
+
+  $("#next").click(function () {
+    $(curList[curIndex]).attr(
+      "style",
+      "background-color:rgb(255, 245, 205);display:table"
+    );
+    curIndex =
+      curIndex == curList.length - 1 ? curList.length - 1 : curIndex + 1;
+    $(curList[curIndex]).attr(
+      "style",
+      "background-color:rgb(255, 204, 0);display:table"
+    );
+    $(this).attr("href", "#" + $(curList[curIndex]).attr("id"));
+  });
+</script>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="./js/jquery.json-viewer.js"></script>
+    <link
+      href="./css/jquery.json-viewer.css"
+      type="text/css"
+      rel="stylesheet"
+    />
+    <style type="text/css">
+      .json_search_butn {
+        text-decoration: none;
+        color: rgb(29, 101, 255);
+      }
+      .json_search_butn:hover {
+        text-decoration: none;
+        color: rgb(0, 63, 198);
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: fixed; right: 10px">
+      <input style="background-color: #0000;color:white;border: 1px white solid;" id="search$uid" />
+      <a href="#" id="previous$uid" class="json_search_butn">previous</a>
+      <a href="#" id="next$uid" class="json_search_butn">next</a>
+    </div>
+
+    <div style="height: $height" id="test$uid"></div>
+  </body>
+</html>
+<script>
+  while ($$("#test$uid") == undefined) {}
+  $$("#test$uid").jsonViewer($data,{ withQuotes: true });
+  // 搜索框
+  var curIndex$uid = 0;
+  var curList$uid = [];
+  $$("#search$uid").bind("input propertychange", function (e) {
+    console.log(e);
+    var str = $$("#search$uid").val();
+    var lis = $$("#test$uid").find("li");
+    if (str == "") {
+      lis.toArray().forEach(function (e) {
+        $$(e).attr("style", "");
+      });
+      return;
+    }
+    curList$uid = [];
+    curIndex$uid = 0;
+    lis.toArray().forEach(function (e) {
+      if (e.innerText.match(str)) {
+        if ($$(e).find("li").toArray().length == 0) {
+          $$(e).attr(
+            "style",
+            "background-color:rgb(255, 245, 205);display:table"
+          );
+          $$(e).attr("id", Math.random() * Math.random());
+          curList$uid.push(e);
+        }
+      } else {
+        $$(e).attr("style", "");
+      }
+      $$(curList$uid[curIndex$uid]).attr(
+        "style",
+        "background-color:rgb(255, 204, 0);display:table"
+      );
+    });
+  });
+
+  // 前一个
+  $$("#previous$uid").click(function () {
+    $$(curList$uid[curIndex$uid]).attr(
+      "style",
+      "background-color:rgb(255, 245, 205);display:table"
+    );
+    curIndex$uid = curIndex$uid == 0 ? 0 : curIndex$uid - 1;
+    $$(curList$uid[curIndex$uid]).attr(
+      "style",
+      "background-color:rgb(255, 204, 0);display:table"
+    );
+    // $$(this).attr("href", "#" + $$(curList$uid[curIndex$uid]).attr("id"));
+  });
+
+  // 后一个
+
+  $$("#next$uid").click(function () {
+    $$(curList$uid[curIndex$uid]).attr(
+      "style",
+      "background-color:rgb(255, 245, 205);display:table"
+    );
+    curIndex$uid =
+      curIndex$uid == curList$uid.length - 1 ? curList$uid.length - 1 : curIndex$uid + 1;
+    $$(curList$uid[curIndex$uid]).attr(
+      "style",
+      "background-color:rgb(255, 204, 0);display:table"
+    );
+    // $$(this).attr("href", "#" + $$(curList$uid[curIndex$uid]).attr("id"));
+  });
+</script>
